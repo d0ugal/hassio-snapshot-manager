@@ -3,7 +3,7 @@ import json
 
 import pytest
 
-from dropbox_upload import hassio
+from snapshot_manager import hassio
 
 
 @pytest.fixture

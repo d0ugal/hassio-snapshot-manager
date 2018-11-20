@@ -2,7 +2,7 @@ import json
 import logging
 
 from dropbox import exceptions
-from dropbox_upload import __main__
+from snapshot_manager import __main__
 
 
 def test_main_invalid_token(tmpdir, requests_mock, caplog):
@@ -19,7 +19,7 @@ def test_main_invalid_token(tmpdir, requests_mock, caplog):
     __main__.main(p.strpath)
 
     assert (
-        "dropbox_upload.__main__",
+        "snapshot_manager.__main__",
         logging.ERROR,
         "Invalid access token",
     ) in caplog.record_tuples
@@ -38,13 +38,13 @@ def test_main(tmpdir, requests_mock, caplog, dropbox_fake):
     __main__.main(p.strpath, sleeper=lambda x: True, DropboxAPI=dropbox_fake)
 
     assert (
-        "dropbox_upload.__main__",
+        "snapshot_manager.__main__",
         logging.INFO,
         "Starting Snapshot backup",
     ) in caplog.record_tuples
 
     assert (
-        "dropbox_upload.__main__",
+        "snapshot_manager.__main__",
         logging.INFO,
         "Uploads complete",
     ) in caplog.record_tuples

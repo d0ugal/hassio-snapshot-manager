@@ -1,7 +1,7 @@
 import json
 import logging
 
-from dropbox_upload import config, dropbox, hassio, limit, util
+from snapshot_manager import config, dropbox, hassio, limit, util
 
 
 def test_bytes_to_human():
@@ -45,7 +45,7 @@ def test_limit_snapshots_no_setting(cfg, caplog):
     cfg["keep"] = None
     limit.limit_snapshots(None, cfg, [])
     assert (
-        "dropbox_upload.limit",
+        "snapshot_manager.limit",
         logging.WARNING,
         "keep not set. We wont remove old snapshots",
     ) in caplog.record_tuples
@@ -55,7 +55,7 @@ def test_limit_snapshots_zero(cfg, caplog):
     cfg["keep"] = 0
     limit.limit_snapshots(None, cfg, [])
     assert (
-        "dropbox_upload.limit",
+        "snapshot_manager.limit",
         logging.WARNING,
         "keep not set. We wont remove old snapshots",
     ) in caplog.record_tuples
@@ -64,12 +64,12 @@ def test_limit_snapshots_zero(cfg, caplog):
 def test_limit_snapshots_not_reached(cfg, caplog):
     limit.limit_snapshots(None, cfg, [])
     assert (
-        "dropbox_upload.limit",
+        "snapshot_manager.limit",
         logging.WARNING,
         "keep not set. We wont remove old snapshots",
     ) not in caplog.record_tuples
     assert (
-        "dropbox_upload.limit",
+        "snapshot_manager.limit",
         logging.INFO,
         "Not reached the maximum number of snapshots",
     ) in caplog.record_tuples
@@ -81,17 +81,17 @@ def test_limit_snapshots(cfg, caplog, snapshots, requests_mock, dropbox_fake):
     cfg["keep"] = 2
     limit.limit_snapshots(dropbox_fake(), cfg, snapshots)
     assert (
-        "dropbox_upload.limit",
+        "snapshot_manager.limit",
         logging.WARNING,
         "keep not set. We wont remove old snapshots",
     ) not in caplog.record_tuples
     assert (
-        "dropbox_upload.limit",
+        "snapshot_manager.limit",
         logging.INFO,
         "Not reached the maximum number of snapshots",
     ) not in caplog.record_tuples
     assert (
-        "dropbox_upload.limit",
+        "snapshot_manager.limit",
         logging.INFO,
         "Deleting 2 snapshots",
     ) in caplog.record_tuples

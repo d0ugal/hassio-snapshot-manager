@@ -1,4 +1,4 @@
 [tool.towncrier]
-    package = "dropbox_upload"
-    package_dir = "dropbox-upload"
+    package = "snapshot_manager"
+    package_dir = "snapshot_manager"
     filename = "CHANGELOG.rst"

@@ -1,0 +1,19 @@
+{
+    "name": "Snapshot Manager",
+    "version": "0.0.1",
+    "slug": "snapshot_manager",
+    "description": "Backup and manage snapshots!",
+    "startup": "application",
+    "url": "https://github.com/d0ugal/hassio-snapshot-manager",
+    "boot": "auto",
+    "hassio_api": true,
+    "hassio_role": "manager",
+    "homeassistant_api": true,
+    "map": [
+        "backup"
+    ],
+    "options": {
+    },
+    "schema": {
+    }
+}

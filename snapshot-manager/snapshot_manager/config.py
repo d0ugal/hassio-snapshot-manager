@@ -2,7 +2,7 @@ import json
 import logging
 import sys
 
-from dropbox_upload import exceptions
+from snapshot_manager import exceptions
 
 DEFAULT_CONFIG = "/data/options.json"
 LOG = logging.getLogger(__name__)

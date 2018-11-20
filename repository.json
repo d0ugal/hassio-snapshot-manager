@@ -1,5 +1,5 @@
 {
-  "name": "HASS.io Dropbox Uploader",
-  "url": "https://github.com/d0ugal/hassio-dropbox-upload",
+  "name": "HASS.io Snapshot Manager",
+  "url": "https://github.com/d0ugal/hassio-snapshot-manager",
   "maintainer": "Dougal Matthews <dougal@dougalmatthews.com>"
 }

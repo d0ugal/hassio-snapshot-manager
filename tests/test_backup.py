@@ -4,7 +4,7 @@ from unittest import mock
 
 import pytest
 
-from dropbox_upload import backup
+from snapshot_manager import backup
 
 
 def test_local_path():
@@ -37,7 +37,7 @@ def test_backup_no_snapshots(cfg, caplog):
     backup.backup(None, cfg, [])
 
     assert (
-        "dropbox_upload.backup",
+        "snapshot_manager.backup",
         logging.WARNING,
         "No snapshots found to backup",
     ) in caplog.record_tuples
@@ -46,7 +46,7 @@ def test_backup_no_snapshots(cfg, caplog):
 def test_snapshot_deleted(cfg, snapshot, caplog):
     backup.process_snapshot(cfg, None, snapshot)
     assert (
-        "dropbox_upload.backup",
+        "snapshot_manager.backup",
         logging.WARNING,
         "The snapshot no longer exists",
     ) in caplog.record_tuples
@@ -55,7 +55,7 @@ def test_snapshot_deleted(cfg, snapshot, caplog):
 def test_snapshot_stats(cfg, snapshot, tmpdir, dropbox_fake):
     file_ = tmpdir.mkdir("sub").join("hello.txt")
     file_.write("testing content 24 bytes" * 1000)
-    with mock.patch("dropbox_upload.backup.local_path") as local_path:
+    with mock.patch("snapshot_manager.backup.local_path") as local_path:
         local_path.return_value = str(file_)
         result = backup.process_snapshot(cfg, dropbox_fake(), snapshot)
     assert result["size_bytes"] == 24000
@@ -67,11 +67,11 @@ def test_backup_keep_limit(cfg, dropbox_fake, snapshots, caplog, tmpdir):
     cfg["keep"] = 2
     file_ = tmpdir.mkdir("sub").join("hello.txt")
     file_.write("testing content 24 bytes" * 1000)
-    with mock.patch("dropbox_upload.backup.local_path") as local_path:
+    with mock.patch("snapshot_manager.backup.local_path") as local_path:
         local_path.return_value = str(file_)
         result = backup.backup(dropbox_fake(), cfg, snapshots)
     assert (
-        "dropbox_upload.backup",
+        "snapshot_manager.backup",
         logging.INFO,
         "Only backing up the first 2 snapshots",
     ) in caplog.record_tuples
@@ -81,13 +81,13 @@ def test_backup_keep_limit(cfg, dropbox_fake, snapshots, caplog, tmpdir):
 
 def test_backup_file_exists(cfg, dropbox_fake, snapshot, caplog):
     caplog.set_level(logging.DEBUG)
-    with mock.patch("dropbox_upload.dropbox.file_exists") as file_exists:
-        with mock.patch("dropbox_upload.backup.local_path") as local_path:
+    with mock.patch("snapshot_manager.dropbox.file_exists") as file_exists:
+        with mock.patch("snapshot_manager.backup.local_path") as local_path:
             local_path.return_value = __file__
             file_exists.return_value = True
             backup.backup(dropbox_fake(), cfg, [snapshot])
     assert (
-        "dropbox_upload.backup",
+        "snapshot_manager.backup",
         logging.INFO,
         "Already found in Dropbox with the same hash",
     ) in caplog.record_tuples
@@ -95,12 +95,12 @@ def test_backup_file_exists(cfg, dropbox_fake, snapshot, caplog):
 
 def test_backup_password_warning(cfg, dropbox_fake, snapshot_unprotected, caplog):
     caplog.set_level(logging.WARNING)
-    with mock.patch("dropbox_upload.dropbox.file_exists") as file_exists:
-        with mock.patch("dropbox_upload.backup.local_path"):
+    with mock.patch("snapshot_manager.dropbox.file_exists") as file_exists:
+        with mock.patch("snapshot_manager.backup.local_path"):
             file_exists.return_value = True
             backup.process_snapshot(cfg, None, snapshot_unprotected)
     assert (
-        "dropbox_upload.backup",
+        "snapshot_manager.backup",
         logging.WARNING,
         f"Snapshot '{snapshot_unprotected['name']}' is not password "
         "protected. Always try to use passwords, particulary when "
@@ -114,7 +114,7 @@ def test_backup_unique_name_check(cfg, snapshot, caplog):
     cfg["filename"] = "snapshot_name"
     backup.backup(None, cfg, snapshots)
     assert (
-        "dropbox_upload.backup",
+        "snapshot_manager.backup",
         logging.ERROR,
         "Snapshot names are not unique. This is incompatible saving snapshots "
         "by name in Dropbox. Names used more than once: "

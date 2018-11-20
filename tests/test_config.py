@@ -2,7 +2,7 @@ import json
 
 import pytest
 
-from dropbox_upload import config, exceptions
+from snapshot_manager import config, exceptions
 
 
 def test_config_dropbox_dir(tmpdir):
