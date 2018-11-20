@@ -9,7 +9,6 @@
     "hassio_api": true,
     "hassio_role": "manager",
     "homeassistant_api": true,
-    "image": "d0ugal/hassio-dropbox-upload-{arch}",
     "map": [
         "backup"
     ],
