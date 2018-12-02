@@ -15,5 +15,6 @@
     "options": {
     },
     "schema": {
-    }
+    },
+    "image": "repo/hassio-snapshot-manager-{arch}"
 }

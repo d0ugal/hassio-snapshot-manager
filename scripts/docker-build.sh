@@ -3,14 +3,14 @@
 set -evx
 set -x
 
-repo=$1;
 
 docker run \
-  --privileged \
-  -v /var/run/docker.sock:/var/run/docker.sock \
-  -v "$repo":/docker \
-  hassioaddons/build-env:latest \
-  --image "d0ugal/hassio-snapshot-manager-{arch}" \
-  --git \
-  --target snapshot-manager \
-  --${ARCH:-all}
+    -v $(pwd)/snapshot-manager:/data \
+    --privileged \
+    -v ~/.docker:/root/.docker \
+    homeassistant/amd64-builder \
+    --all  \
+    --docker-hub d0ugal \
+    --image "hassio-snapshot-manager-{arch}" \
+    --target /data \
+    --version dev;
